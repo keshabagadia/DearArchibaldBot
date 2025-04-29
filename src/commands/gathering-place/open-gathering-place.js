@@ -17,12 +17,12 @@ module.exports = {
     if (!existingPlace) {
       return interaction.reply({
         content: '⚠️ No gathering place exists in this guild.',
-        flags: 64, // Ephemeral
+        flags: MessageFlags.Ephemeral, // Ephemeral
       });
     }
 
     if (sceneManager.isSceneActive(channelId)) {
-      return interaction.reply({ content: 'A scene is already active in this channel.', flags: 64 });
+      return interaction.reply({ content: 'A scene is already active in this channel.', flags: MessageFlags.Ephemeral });
     }
 
     sceneManager.startScene(channelId);

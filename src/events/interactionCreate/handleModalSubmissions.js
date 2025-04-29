@@ -25,13 +25,13 @@ module.exports = async (client, interaction) => {
 
       await interaction.reply({
         content: '✅ Gathering place updated!',
-        flags: 64,
+        flags: MessageFlags.Ephemeral,
       });
     } catch (err) {
       console.error('Error handling modal:', err);
       await interaction.reply({
         content: 'Something went wrong updating the place.',
-        flags: 64,
+        flags: MessageFlags.Ephemeral,
       });
     }
   }
@@ -77,14 +77,14 @@ module.exports = async (client, interaction) => {
           `**Purpose:** ${data.purpose}\n` +
           `**Description:**\n${data.description.map((line) => `• ${line}`).join('\n')}\n\n` +
           `When you're ready, use \`/open-gathering-place\` to bring it to life.`,
-        flags: 64,
+        flags: MessageFlags.Ephemeral,
       });
       
     } catch (err) {
       console.error('Error handling creation modal:', err);
       await interaction.reply({
         content: 'Something went wrong creating the gathering place.',
-        flags: 64,
+        flags: MessageFlags.Ephemeral,
       });
     }
   }

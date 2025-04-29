@@ -10,7 +10,7 @@ module.exports = {
     if (!matchingPrompt) {
       return await interaction.reply({
         content: "No prompt found for this roll.",
-        flags: 64,
+        flags: MessageFlags.Ephemeral,
       });
     }
 

@@ -7,6 +7,7 @@ const {
 const GatheringPlace = require('../../models/GatheringPlace');
 const gatheringPlaceManager = require('../../utils/gatheringPlaceManager');
 const { buildGatheringPlaceModal } = require('../../utils/gatheringPlaceForm');
+const { debug } = require('openai/core.mjs');
 
 module.exports = {
   name: 'create-gathering-place',
@@ -14,14 +15,15 @@ module.exports = {
 
   callback: async (client, interaction) => {
     const guildID = interaction.guild.id;
-    const existingPlace = gatheringPlaceManager.getPlace(guildID);
+    const existingPlace = await gatheringPlaceManager.getPlace(guildID);
+    //console.log('Existing place:', existingPlace);
 
     if (existingPlace) {
       await interaction.reply({
         content:
         `⚠️ A gathering place already exists in this channel.\n` +
         `You can use \`/edit-gathering-place\` to modify it.`,
-        flags: 64,
+        flags: MessageFlags.Ephemeral,
       });
       return;
       }
@@ -32,7 +34,7 @@ module.exports = {
       console.error('Error showing modal:', error);
       await interaction.reply({
         content: 'Something went wrong while showing the form. Please try again later.',
-        flags: 64,
+        flags: MessageFlags.Ephemeral,
       });
     }
   },
