@@ -22,7 +22,7 @@ module.exports = {
     }
 
     if (sceneManager.isSceneActive(channelId)) {
-      return interaction.reply({ content: 'A scene is already active in this channel.', ephemeral: true });
+      return interaction.reply({ content: 'A scene is already active in this channel.', flags: 64 });
     }
 
     sceneManager.startScene(channelId);

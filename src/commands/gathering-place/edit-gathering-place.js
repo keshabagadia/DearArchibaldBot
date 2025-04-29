@@ -10,7 +10,7 @@ module.exports = {
     const place = gatheringPlaceManager.getPlace(guildID);
 
     if (!place) {
-      return interaction.reply({ content: 'No gathering place is active in this channel.', ephemeral: true });
+      return interaction.reply({ content: 'No gathering place is active in this channel.', flags: 64 });
     }
 
     const modal = new ModalBuilder()

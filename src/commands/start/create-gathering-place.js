@@ -21,7 +21,7 @@ module.exports = {
         content:
         `⚠️ A gathering place already exists in this channel.\n` +
         `You can use \`/edit-gathering-place\` to modify it.`,
-        ephemeral: true,
+        flags: 64,
       });
       return;
       }
@@ -32,7 +32,7 @@ module.exports = {
       console.error('Error showing modal:', error);
       await interaction.reply({
         content: 'Something went wrong while showing the form. Please try again later.',
-        ephemeral: true,
+        flags: 64,
       });
     }
   },
