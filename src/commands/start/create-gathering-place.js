@@ -14,28 +14,11 @@ module.exports = {
   description: 'Create a new gathering place via a form.',
 
   callback: async (client, interaction) => {
-    const guildID = interaction.guild.id;
-    const existingPlace = await gatheringPlaceManager.getPlace(guildID);
-    //console.log('Existing place:', existingPlace);
-
-    if (existingPlace) {
-      await interaction.reply({
-        content:
-        `⚠️ A gathering place already exists in this channel.\n` +
-        `You can use \`/edit-gathering-place\` to modify it.`,
-        flags: MessageFlags.Ephemeral,
-      });
-      return;
-      }
-      try {
-        const modal = buildGatheringPlaceModal('createGatheringPlaceModal', 'Create Gathering Place');
-        await interaction.showModal(modal);        
+        try {
+      const modal = buildGatheringPlaceModal('createGatheringPlaceModal', 'Create Gathering Place');
+      await interaction.showModal(modal);
     } catch (error) {
       console.error('Error showing modal:', error);
-      await interaction.reply({
-        content: 'Something went wrong while showing the form. Please try again later.',
-        flags: MessageFlags.Ephemeral,
-      });
     }
   },
 };

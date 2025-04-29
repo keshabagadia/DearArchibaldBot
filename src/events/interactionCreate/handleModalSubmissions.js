@@ -1,42 +1,24 @@
+const { MessageFlags } = require('discord.js');
 const gatheringPlaceManager = require('../../utils/gatheringPlaceManager');
 const GatheringPlace = require('../../models/GatheringPlace');
 
 module.exports = async (client, interaction) => {
   if (!interaction.isModalSubmit()) return;
 
-  if (interaction.customId === 'editGatheringPlaceModal') {
-    try {
-      const guildID = interaction.guild.id;
-
-      const updatedData = {
-        type: interaction.fields.getTextInputValue('type'),
-        location: interaction.fields.getTextInputValue('location'),
-        name: interaction.fields.getTextInputValue('name') || undefined,
-        purpose: interaction.fields.getTextInputValue('purpose'),
-        description: interaction.fields.getTextInputValue('description').split('\n'),
-      };
-
-      const updated = gatheringPlaceManager.updatePlace(guildID, updatedData);
-
-      await GatheringPlace.updateOne(
-        { gatheringPlaceId: updated.gatheringPlaceId, guildId: interaction.guild.id },
-        { $set: updatedData }
-      );
-
-      await interaction.reply({
-        content: '✅ Gathering place updated!',
-        flags: MessageFlags.Ephemeral,
-      });
-    } catch (err) {
-      console.error('Error handling modal:', err);
-      await interaction.reply({
-        content: 'Something went wrong updating the place.',
-        flags: MessageFlags.Ephemeral,
-      });
-    }
-  }
-
   if (interaction.customId === 'createGatheringPlaceModal') {
+    const guildID = interaction.guild.id;
+    const existingPlace = await gatheringPlaceManager.getPlace(guildID);
+
+    if (existingPlace) {
+      await interaction.reply({
+        content:
+        `⚠️ A gathering place already exists in this channel.\n` +
+        `You can use \`/edit-gathering-place\` to modify it.`,
+        flags: MessageFlags.Ephemeral,
+      });
+      return;
+    }
+
     try {
       const generateUniqueId = async () => {
         let id, exists = true;
@@ -48,8 +30,7 @@ module.exports = async (client, interaction) => {
       };
 
       const gatheringPlaceId = await generateUniqueId();
-      const guildID = interaction.guild.id;
-
+      
       const data = {
         gatheringPlaceId,
         guildId: guildID,
@@ -66,7 +47,7 @@ module.exports = async (client, interaction) => {
       };
 
       await GatheringPlace.create(data);
-      gatheringPlaceManager.setPlace(channelId, data);
+      gatheringPlaceManager.setPlace(guildID, data);
 
       await interaction.reply({
         content:
@@ -82,10 +63,12 @@ module.exports = async (client, interaction) => {
       
     } catch (err) {
       console.error('Error handling creation modal:', err);
-      await interaction.reply({
-        content: 'Something went wrong creating the gathering place.',
-        flags: MessageFlags.Ephemeral,
-      });
+      if (!interaction.replied && !interaction.deferred) {
+        await interaction.reply({
+          content: 'Something went wrong creating the gathering place.',
+          flags: MessageFlags.Ephemeral,
+        });
+      }
     }
   }
 };

@@ -28,6 +28,6 @@ const client = new Client({
   }
 })();
 
-console.log("testing deployment");
+//console.log("testing deployment");
 
 
