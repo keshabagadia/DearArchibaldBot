@@ -28,7 +28,7 @@ module.exports = async (client) => {
       const manager = scope === 'guild' ? guildCommandManager : globalCommandManager;
       const cache = commandScopeCache[scope];
 
-      console.log(`🔍 Command: "${name}" | testOnly: ${testOnly} | scope: ${scope}`);
+      //console.log(`🔍 Command: "${name}" | testOnly: ${testOnly} | scope: ${scope}`);
 
       localCommandNames[scope].push(name);
 
@@ -54,7 +54,7 @@ module.exports = async (client) => {
           });
           console.log(`✅ Edited "${name}" in ${scope}`);
         } else {
-          console.log(`⏩ No changes for "${name}" in ${scope}`);
+          //console.log(`⏩ No changes for "${name}" in ${scope}`);
         }
       } else {
         console.log(`📦 Registering new command "${name}" in ${scope}...`);
