@@ -13,4 +13,8 @@ const promptSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  memoryChange: {
+    type: Number,
+    default: 0,
+  },
 });
