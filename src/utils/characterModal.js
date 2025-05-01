@@ -21,7 +21,7 @@ function buildCharacterModal(customId, title, defaults = {}) {
     {
       id: 'mind',
       label: 'MIND (ONE TRAIT)',
-      placeholder: 'Wise, Absent-Minded, Witty, Inventor',
+      placeholder: 'Wise, Absent-Minded, Witty',
       style: TextInputStyle.Short,
       value: mind,
       required: true
@@ -29,7 +29,7 @@ function buildCharacterModal(customId, title, defaults = {}) {
     {
       id: 'body',
       label: 'BODY (ONE TRAIT)',
-      placeholder: 'Agile, Furry,Huge, Poor Constitution, Quick, Razor Sharp',
+      placeholder: 'Agile, Furry, Poor Constitution',
       style: TextInputStyle.Short,
       value: body,
       required: true
@@ -37,7 +37,7 @@ function buildCharacterModal(customId, title, defaults = {}) {
     {
       id: 'strength',
       label: 'EDGE - WHAT IS ONE STRENGTH?',
-      placeholder: 'Acrobatics, Potion-Making, Good Memory, Good Nose',
+      placeholder: 'Acrobatics, Potion-Making, Good Nose',
       style: TextInputStyle.Short,
       value: strength,
       required: true
@@ -45,7 +45,7 @@ function buildCharacterModal(customId, title, defaults = {}) {
     {
       id: 'flaw',
       label: 'DEPTH - WHAT IS ONE FLAW?',
-      placeholder: 'Clumsy, Perfectionistic, Grumpy, Arguementative, Overworked',
+      placeholder: 'Clumsy, Perfectionistic, Overworked',
       style: TextInputStyle.Short,
       value: flaw,
       required: true
