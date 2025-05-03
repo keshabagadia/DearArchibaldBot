@@ -1,6 +1,7 @@
 const { MessageFlags } = require('discord.js');
 const gatheringPlaceManager = require('../../utils/gatheringPlaceManager');
 const GatheringPlace = require('../../models/GatheringPlace');
+const Character = require('../../models/Character');
 
 module.exports = async (client, interaction) => {
   if (!interaction.isModalSubmit()) return;
@@ -47,7 +48,7 @@ module.exports = async (client, interaction) => {
       };
 
       await GatheringPlace.create(data);
-      gatheringPlaceManager.setPlace(guildID, data);
+      //gatheringPlaceManager.setPlace(guildID, data);
 
       await interaction.reply({
         content:
@@ -66,6 +67,65 @@ module.exports = async (client, interaction) => {
       if (!interaction.replied && !interaction.deferred) {
         await interaction.reply({
           content: 'Something went wrong creating the gathering place.',
+          flags: MessageFlags.Ephemeral,
+        });
+      }
+    }
+  }
+  if (interaction.customId === 'createCharacterModal') {
+    const guildID = interaction.guild.id;
+    const userID = interaction.user.id;
+
+    try {
+      const gatheringPlace = await gatheringPlaceManager.getPlace(guildID);
+      if (!gatheringPlace) {
+        return await interaction.reply({
+          content: '⚠️ No gathering place found for this server. Please create one first using `/create-gathering-place`.',
+          flags: MessageFlags.Ephemeral,
+        });
+      }
+
+      const generateUniqueId = async () => {
+        let id, exists = true;
+        while (exists) {
+          id = Math.floor(100000 + Math.random() * 900000);
+          exists = await Character.exists({ characterId: id });
+        }
+        return id;
+      };
+
+      const characterId = await generateUniqueId();
+
+      const data = {
+        characterId,
+        gatheringPlaceID: gatheringPlace.gatheringPlaceId, // auto-fetched
+        guildId: guildID,
+        userId: userID,
+        name: interaction.fields.getTextInputValue('name'),
+        mind: interaction.fields.getTextInputValue('mind'),
+        body: interaction.fields.getTextInputValue('body'),
+        strength: interaction.fields.getTextInputValue('strength'),
+        flaw: interaction.fields.getTextInputValue('flaw'),
+      };
+
+      await Character.create(data);
+
+      await interaction.reply({
+        content:
+          `✅ **Character Created!**\n\n` +
+          `**Name:** ${data.name}\n` +
+          `**Mind:** ${data.mind}\n` +
+          `**Body:** ${data.body}\n` +
+          `**Strength:** ${data.strength}\n` +
+          `**Flaw:** ${data.flaw}`,
+        flags: MessageFlags.Ephemeral,
+      });
+
+    } catch (err) {
+      console.error('Error handling character creation modal:', err);
+      if (!interaction.replied && !interaction.deferred) {
+        await interaction.reply({
+          content: 'Something went wrong creating the character.',
           flags: MessageFlags.Ephemeral,
         });
       }
