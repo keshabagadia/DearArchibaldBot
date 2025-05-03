@@ -16,7 +16,7 @@ module.exports = [
       `A field mouse comes in, his small child in tow. It is extremely clear that the kid is in serious need of some manners.`,
     level: 1,
     optionalScenarios: [
-      `The kid immediately breaks something in the `room. What is it?`,
+      `The kid immediately breaks something in the room. What is it?`,
       `The field mouse sighs and says he hasn't slept in days because nobody is around to watch the kid right now except him. He’s getting pressure from his village, who don’t understand why he can’t “pull his own weight.” He asks for help.`,
     ],
   },
