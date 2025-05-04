@@ -1,13 +1,12 @@
-const Visitor = require('../models/Visitor'); // Import the Visitor model
+const visitors = require('../data/visitors'); 
 
 const getRandomVisitor = async () => {
   try {
-    const count = await Visitor.countDocuments();
-    if (count === 0) return null; // Return null if no visitors exist
+    if (visitors.length === 0) return null;
 
-    const randomIndex = Math.floor(Math.random() * count); // Generate a random index
-    const randomVisitor = await Visitor.findOne().skip(randomIndex); // Fetch the visitor at the random index
-
+    const randomIndex = Math.floor(Math.random() * visitors.length); 
+    const randomVisitor = visitors[randomIndex];
+    
     return randomVisitor;
   } catch (error) {
     console.error('Error fetching random visitor:', error);
