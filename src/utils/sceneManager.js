@@ -1,9 +1,9 @@
 // utils/sceneManager.js
-const activeScenes = new Map(); // channelId -> { messages: [] }
+const activeScenes = new Map(); // channelId -> { messages: [], currentVisitor: null }
 
 module.exports = {
-  startScene(channelId) {
-    activeScenes.set(channelId, { messages: [] });
+  startScene(channelId, visitor) {
+    activeScenes.set(channelId, { messages: [], currentVisitor: visitor });
   },
   endScene(channelId) {
     const scene = activeScenes.get(channelId);
@@ -17,5 +17,8 @@ module.exports = {
     if (activeScenes.has(channelId)) {
       activeScenes.get(channelId).messages.push(messageContent);
     }
+  },
+  getCurrentVisitor(channelId) {
+    return activeScenes.get(channelId)?.currentVisitor || null;
   },
 };

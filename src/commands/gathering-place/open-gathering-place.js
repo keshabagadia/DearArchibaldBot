@@ -41,7 +41,7 @@ module.exports = {
         Math.floor(Math.random() * visitor.optionalScenarios.length)
       ];
 
-    sceneManager.startScene(channelId);
+    sceneManager.startScene(channelId, visitor);
     await interaction.reply({
       content:
         `_You have a visitor._\n` +
@@ -49,8 +49,7 @@ module.exports = {
         `${visitor.description}\n` +
         `If the interaction goes well, ${visitor.goodOutcome}\n` +
         `If the interaction goes poorly, ${visitor.badOutcome}\n` +
-        `> Memory: ${visitor.memory}\n` +
-        `> Optional Scenario: ${randomScenario}\n`,
+        `> Memory: ${visitor.memory}\n`,
       components: [
         new ActionRowBuilder().addComponents(
           new ButtonBuilder()
