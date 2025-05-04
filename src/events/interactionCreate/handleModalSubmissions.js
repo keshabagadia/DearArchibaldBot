@@ -1,5 +1,5 @@
 const { MessageFlags } = require('discord.js');
-const gatheringPlaceManager = require('../../utils/gatheringPlaceManager');
+const gatheringPlaceManager = require('../../modals/gatheringPlaceManager');
 const GatheringPlace = require('../../models/GatheringPlace');
 const Character = require('../../models/Character');
 

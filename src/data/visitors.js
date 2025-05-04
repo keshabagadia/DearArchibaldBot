@@ -11,7 +11,7 @@
 
 function createVisitor(visitorData) {
   return {
-    memory: 0,
+    memory: 1,
     goodOutcome: "Placeholder for a positive resolution.",
     badOutcome: "Placeholder for a negative outcome.",
     ...visitorData,

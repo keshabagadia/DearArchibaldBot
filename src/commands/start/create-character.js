@@ -5,8 +5,7 @@ const {
     ActionRowBuilder,
   } = require('discord.js');
   const Character = require('../../models/Character');
-  //const gatheringPlaceManager = require('../../utils/gatheringPlaceManager');
-  const { buildCharacterModal } = require('../../utils/characterModal');
+  const { buildCharacterModal } = require('../../modals/characterModal');
 
   module.exports = {
     name: 'create-character',

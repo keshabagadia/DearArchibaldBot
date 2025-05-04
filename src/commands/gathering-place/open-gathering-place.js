@@ -11,12 +11,21 @@ module.exports = {
     const guildId = interaction.guild.id;
     const channelId = interaction.channel.id;
     const existingPlace = await gatheringPlaceManager.getPlace(guildId);
-    const visitor = await getRandomVisitor(); // Fetch a random visitor from the database
-    console.log(`Existing gathering place: ${existingPlace}`);
+
     if (!existingPlace) {
       return interaction.reply({
         content: "⚠️ No gathering place exists in this guild.",
         flags: MessageFlags.Ephemeral, // Ephemeral
+      });
+    }
+
+    const visitor = await getRandomVisitor(existingPlace); // Pass existingPlace to getRandomVisitor
+    console.log(`Existing gathering place: ${existingPlace}`);
+
+    if (!visitor) {
+      return interaction.reply({
+        content: "⚠️ No suitable visitor found for this gathering place.",
+        flags: MessageFlags.Ephemeral,
       });
     }
 
@@ -26,6 +35,7 @@ module.exports = {
         flags: MessageFlags.Ephemeral,
       });
     }
+
     const randomScenario =
       visitor.optionalScenarios[
         Math.floor(Math.random() * visitor.optionalScenarios.length)
@@ -39,7 +49,8 @@ module.exports = {
         `${visitor.description}\n` +
         `If the interaction goes well, ${visitor.goodOutcome}\n` +
         `If the interaction goes poorly, ${visitor.badOutcome}\n` +
-        `> Memory: ${visitor.memory}\n`,
+        `> Memory: ${visitor.memory}\n` +
+        `> Optional Scenario: ${randomScenario}\n`,
       components: [
         new ActionRowBuilder().addComponents(
           new ButtonBuilder()

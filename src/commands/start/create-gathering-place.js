@@ -6,7 +6,7 @@ const {
 } = require('discord.js');
 const GatheringPlace = require('../../models/GatheringPlace');
 const gatheringPlaceManager = require('../../utils/gatheringPlaceManager');
-const { buildGatheringPlaceModal } = require('../../utils/gatheringPlaceModal');
+const { buildGatheringPlaceModal } = require('../../modals/gatheringPlaceModal');
 const { debug } = require('openai/core.mjs');
 
 module.exports = {
