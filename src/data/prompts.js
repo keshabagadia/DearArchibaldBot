@@ -1,3 +1,10 @@
+/**
+ * Prompt Schema:
+ * - id (number): Unique identifier for the prompt.
+ * - prompt (string): The text of the prompt, describing the situation or question.
+ * - isTwist (boolean): Indicates this is a "twist prompt" (true) or a regular prompt (false).
+ * - memoryChange (number): The impact of the prompt on the visitor's memory, positive or negative.
+ */
 module.exports = [
   {
     prompt:

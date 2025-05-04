@@ -37,7 +37,8 @@ module.exports = {
         `_You have a visitor._\n` +
         `**${visitor.title}**\n` +
         `${visitor.description}\n` +
-        `${randomScenario}\n` +
+        `If the interaction goes well, ${visitor.goodOutcome}\n` +
+        `If the interaction goes poorly, ${visitor.badOutcome}\n` +
         `> Memory: ${visitor.memory}\n`,
       components: [
         new ActionRowBuilder().addComponents(
