@@ -2,3 +2,4 @@ node_modules/
 .env
 DA_Test.pem
 ecosystem.config.js
+deploy-remote.sh
