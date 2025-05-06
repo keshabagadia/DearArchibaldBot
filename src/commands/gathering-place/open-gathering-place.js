@@ -1,6 +1,7 @@
 const sceneManager = require("../../utils/sceneManager");
 const gatheringPlaceManager = require("../../utils/gatheringPlaceManager");
 const getRandomVisitor = require("../../utils/getRandomVisitor");
+const dailyTracker = require("../../utils/dailyTracker");
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageFlags } = require("discord.js");
 
 module.exports = {
@@ -19,6 +20,13 @@ module.exports = {
       });
     }
 
+    if (!dailyTracker.canOpenGatheringPlace(guildId)) {
+      return interaction.reply({
+        content: "⚠️ The gathering place has already been opened today.",
+        flags: MessageFlags.Ephemeral,
+      });
+    }
+
     const visitor = await getRandomVisitor(existingPlace); // Pass existingPlace to getRandomVisitor
     console.log(`Existing gathering place: ${existingPlace}`);
 
@@ -28,6 +36,8 @@ module.exports = {
         flags: MessageFlags.Ephemeral,
       });
     }
+
+    dailyTracker.markGatheringPlaceOpened(guildId);
 
     if (sceneManager.isSceneActive(channelId)) {
       return interaction.reply({
@@ -53,9 +63,13 @@ module.exports = {
       components: [
         new ActionRowBuilder().addComponents(
           new ButtonBuilder()
-            .setCustomId("roll_20") // 👈 this MUST match your roll20.js `customId`
+            .setCustomId("roll_20")
             .setLabel("🎲Roll 20")
-            .setStyle(ButtonStyle.Primary)
+            .setStyle(ButtonStyle.Primary),
+          new ButtonBuilder()
+            .setCustomId("reset_daily_tracker")
+            .setLabel("Reset Daily Tracker")
+            .setStyle(ButtonStyle.Danger)
         ),
       ],
     });
