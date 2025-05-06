@@ -1,6 +1,6 @@
-const prompts = require("../data/prompts.js");
 const sceneManager = require("../utils/sceneManager.js");
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageFlags } = require("discord.js");
+const { handleRoll } = require("../utils/handleRoll.js");
+const { MessageFlags } = require("discord.js");
 
 module.exports = {
   customId: "reroll_20",
@@ -15,44 +15,7 @@ module.exports = {
       });
     }
 
-    visitor.memory -= 1;
-
-    const roll = Math.floor(Math.random() * 20) + 1;
-    const matchingPrompt = prompts.find((prompt) => prompt.id === roll);
-
-    if (!matchingPrompt) {
-      return interaction.reply({
-        content: "❌ No prompt found for this reroll.",
-        flags: MessageFlags.Ephemeral,
-      });
-    }
-
-    const response = `🔁 You rerolled and got a **${roll}**!\n` +
-                     `${matchingPrompt.prompt}\n`;
-
-    const components = [
-      new ActionRowBuilder().addComponents(
-        new ButtonBuilder()
-          .setCustomId("reset_daily_tracker")
-          .setLabel("Reset Daily Tracker")
-          .setStyle(ButtonStyle.Danger)
-      )
-    ];
-
-    if (visitor.memory > 1) {
-      components.push(
-        new ActionRowBuilder().addComponents(
-          new ButtonBuilder()
-            .setCustomId("reroll_20")
-            .setLabel("🔄 Reroll (Spend 1 Memory)")
-            .setStyle(ButtonStyle.Secondary)
-        )
-      );
-    }
-
-    await interaction.reply({
-      content: response,
-      components,
-    });
+    // Call the reusable roll handler with memory deduction
+    await handleRoll(interaction, visitor, true);
   },
 };

@@ -59,7 +59,7 @@ module.exports = {
         `${visitor.description}\n` +
         `If the interaction goes well, ${visitor.goodOutcome}\n` +
         `If the interaction goes poorly, ${visitor.badOutcome}\n` +
-        `> Memory: ${visitor.memory}\n`,
+        `> Visitor's Memory: ${visitor.memory}\n`,
       components: [
         new ActionRowBuilder().addComponents(
           new ButtonBuilder()
