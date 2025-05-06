@@ -65,11 +65,7 @@ module.exports = {
           new ButtonBuilder()
             .setCustomId("roll_20")
             .setLabel("🎲Roll 20")
-            .setStyle(ButtonStyle.Primary),
-          new ButtonBuilder()
-            .setCustomId("reset_daily_tracker")
-            .setLabel("Reset Daily Tracker")
-            .setStyle(ButtonStyle.Danger)
+            .setStyle(ButtonStyle.Primary)
         ),
       ],
     });

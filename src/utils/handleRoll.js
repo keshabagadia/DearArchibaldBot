@@ -1,63 +1,61 @@
 const prompts = require("../data/prompts.js");
 const sceneManager = require("../utils/sceneManager.js");
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageFlags } = require("discord.js");
+const { trackRoll } = require("./dailyTracker.js");
 
 async function handleRoll(interaction, visitor, deductMemory = false) {
   const channelId = interaction.channel.id;
 
-  // Deduct memory if required
   if (deductMemory) {
     if (visitor.memory <= 0) {
       return interaction.reply({
         content: "⚠️ Not enough memory to reroll.",
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       });
     }
     visitor.memory -= 1;
   }
 
-  // Generate a random roll
   const roll = Math.floor(Math.random() * 20) + 1;
-  const matchingPrompt = prompts.find((prompt) => prompt.id === roll);
+  const isNewPrompt = trackRoll(interaction.guild.id, roll);
+  const promptId = isNewPrompt ? roll : roll + 100;
+  const prompt = prompts.find((p) => p.id === promptId);
 
-  // Check if a matching prompt exists
-  if (!matchingPrompt) {
+  if (!prompt) {
     return interaction.reply({
       content: "⚠️ No prompt found for this roll.",
-      ephemeral: true,
+      flags: MessageFlags.Ephemeral,
     });
   }
 
-  // Save the prompt for the current scene
-  sceneManager.setLastPrompt(channelId, matchingPrompt);
+  sceneManager.setLastPrompt(channelId, isNewPrompt ? prompt : null);
 
-  // Prepare the response
-  const response = `🎲 You rolled a **${roll}**!\n` +
-                   `${matchingPrompt.prompt}\n` +
-                   `> Visitor's Memory: ${visitor.memory}\n`;
+  const twistNote = isNewPrompt ? "" : "There has been a twist. ";
+  const response = `🎲 You rolled a **${roll}**${isNewPrompt ? "" : " again"}.\n${twistNote}${prompt.prompt}\n> Visitor's Memory: ${visitor.memory}`;
 
-  // Add buttons for further actions
-  const actionRow = new ActionRowBuilder().addComponents(
-    new ButtonBuilder()
-      .setCustomId("reset_daily_tracker")
-      .setLabel("Reset Daily Tracker")
-      .setStyle(ButtonStyle.Danger)
-  );
-
-  // Add a reroll button if the visitor has memory left
-  if (visitor.memory > 0) {
-    actionRow.addComponents(
+  const buttons = [];
+  if (isNewPrompt && visitor.memory > 0) {
+    buttons.push(
       new ButtonBuilder()
         .setCustomId("reroll_20")
         .setLabel("🔄🎲 Reroll (Spend 1 Memory)")
         .setStyle(ButtonStyle.Secondary)
     );
+  } else if (!isNewPrompt) {
+    buttons.push(
+      new ButtonBuilder()
+        .setCustomId("roll_6")
+        .setLabel("🎲 Roll 6")
+        .setStyle(ButtonStyle.Primary)
+    );
   }
 
-  await interaction.reply({
-    content: response,
-    components: [actionRow],
-  });
+  const replyOptions = { content: response };
+  if (buttons.length > 0) {
+    replyOptions.components = [new ActionRowBuilder().addComponents(buttons)];
+  }
+
+  return interaction.reply(replyOptions);
 }
 
 module.exports = { handleRoll };

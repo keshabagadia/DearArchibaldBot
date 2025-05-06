@@ -1,0 +1,44 @@
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
+
+function getMemoryOutcome(visitor, memoryChange) {
+  // Start with the base message
+  let resultMessage = `\nThe visitor's memory has changed by ${memoryChange}.\n> Visitor's Memory: ${visitor.memory}`;
+  let components = [];
+
+  // Append additional information based on memory conditions
+  if (visitor.memory <= 0) {
+    resultMessage += `\n${visitor.badOutcome}`;
+    components = [
+      new ActionRowBuilder().addComponents(
+        new ButtonBuilder()
+          .setCustomId("get_gift")
+          .setLabel("🎁 End Scene & Receive Gift")
+          .setStyle(ButtonStyle.Primary)
+      ),
+    ];
+  } else if (visitor.memory >= 6) {
+    resultMessage += `\n${visitor.goodOutcome}`;
+    components = [
+      new ActionRowBuilder().addComponents(
+        new ButtonBuilder()
+          .setCustomId("get_gift")
+          .setLabel("🎁 End Scene & Receive Gift")
+          .setStyle(ButtonStyle.Primary)
+      ),
+    ];
+  } else {
+    resultMessage += `\n\nYou may roll again to continue the journey.`;
+    components = [
+      new ActionRowBuilder().addComponents(
+        new ButtonBuilder()
+          .setCustomId("roll_20")
+          .setLabel("🎲 Roll 20")
+          .setStyle(ButtonStyle.Primary)
+      ),
+    ];
+  }
+
+  return { resultMessage, components };
+}
+
+module.exports = { getMemoryOutcome };

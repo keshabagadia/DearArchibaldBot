@@ -4,41 +4,45 @@ function getToday() {
   return new Date().toDateString();
 }
 
+function resetDailyTracker(guildId) {
+  rolledNumbers.set(guildId, { rolled: new Set(), lastOpened: null });
+}
+
+function resetDailyTrackerIfNeeded(guildId, today) {
+  if (!rolledNumbers.has(guildId)) {
+    resetDailyTracker(guildId);
+  }
+
+  const guildData = rolledNumbers.get(guildId);
+
+  if (guildData.lastOpened !== today) {
+    resetDailyTracker(guildId);
+    guildData.lastOpened = today;
+  }
+}
+
 module.exports = {
   trackRoll(guildId, roll) {
     const today = getToday();
 
-    this.resetDailyTrackerIfNeeded(guildId, today);
+    resetDailyTrackerIfNeeded(guildId, today);
 
     const guildData = rolledNumbers.get(guildId);
 
     const isNewRoll = !guildData.rolled.has(roll);
-    guildData.rolled.add(roll);
+    if (isNewRoll) guildData.rolled.add(roll);
 
-    return isNewRoll;
+    return isNewRoll; // Return whether the roll was new
   },
 
-  resetDailyTracker(guildId) {
-    rolledNumbers.set(guildId, { rolled: new Set(), lastOpened: null });
-  },
+  resetDailyTracker,
 
-  resetDailyTrackerIfNeeded(guildId, today) {
-    if (!rolledNumbers.has(guildId)) {
-      this.resetDailyTracker(guildId);
-    }
-
-    const guildData = rolledNumbers.get(guildId);
-
-    if (guildData.lastOpened !== today) {
-      this.resetDailyTracker(guildId);
-      guildData.lastOpened = today;
-    }
-  },
+  resetDailyTrackerIfNeeded,
 
   canOpenGatheringPlace(guildId) {
     const today = getToday();
 
-    this.resetDailyTrackerIfNeeded(guildId, today);
+    resetDailyTrackerIfNeeded(guildId, today);
 
     const guildData = rolledNumbers.get(guildId);
     return guildData.lastOpened !== today;
@@ -47,7 +51,7 @@ module.exports = {
   markGatheringPlaceOpened(guildId) {
     const today = getToday();
 
-    this.resetDailyTrackerIfNeeded(guildId, today);
+    resetDailyTrackerIfNeeded(guildId, today);
 
     const guildData = rolledNumbers.get(guildId);
     guildData.lastOpened = today;

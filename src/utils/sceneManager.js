@@ -22,10 +22,7 @@ module.exports = {
   addMessage(channelId, message) {
     if (!activeScenes.has(channelId)) return;
 
-    activeScenes.get(channelId).messages.push({
-      content: message.content,
-      timestamp: message.createdTimestamp,
-    });
+    activeScenes.get(channelId).messages.push(message.content);
   },
 
   getMessages(channelId) {

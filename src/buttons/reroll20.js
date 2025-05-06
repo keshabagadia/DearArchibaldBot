@@ -14,8 +14,7 @@ module.exports = {
         flags: MessageFlags.Ephemeral,
       });
     }
-
-    // Call the reusable roll handler with memory deduction
+    
     await handleRoll(interaction, visitor, true);
   },
 };
