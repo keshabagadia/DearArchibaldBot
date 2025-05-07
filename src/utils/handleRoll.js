@@ -34,7 +34,7 @@ async function handleRoll(interaction, visitor, deductMemory = false) {
   const response = `🎲 You rolled a **${roll}**${isNewPrompt ? "" : " again"}.\n${twistNote}${prompt.prompt}\n> Visitor's Memory: ${visitor.memory}`;
 
   const buttons = [];
-  if (isNewPrompt && visitor.memory > 0) {
+  if (isNewPrompt && visitor.memory > 1) {
     buttons.push(
       new ButtonBuilder()
         .setCustomId("reroll_20")
