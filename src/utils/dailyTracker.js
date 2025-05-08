@@ -1,3 +1,4 @@
+const DailyTrackRecord = require('../models/DailyTrackRecord.js');
 const rolledNumbers = new Map(); // guildId -> { rolled: Set<number>, lastOpened: Date }
 
 function getToday() {
@@ -8,7 +9,7 @@ function resetDailyTracker(guildId) {
   rolledNumbers.set(guildId, { rolled: new Set(), lastOpened: null });
 }
 
-function resetDailyTrackerIfNeeded(guildId, today) {
+function setDailyTrackerForGuild(guildId, today) {
   if (!rolledNumbers.has(guildId)) {
     resetDailyTracker(guildId);
   }
@@ -25,7 +26,7 @@ module.exports = {
   trackRoll(guildId, roll) {
     const today = getToday();
 
-    resetDailyTrackerIfNeeded(guildId, today);
+    setDailyTrackerForGuild(guildId, today);
 
     const guildData = rolledNumbers.get(guildId);
 
@@ -37,12 +38,12 @@ module.exports = {
 
   resetDailyTracker,
 
-  resetDailyTrackerIfNeeded,
+  resetDailyTrackerIfNeeded: setDailyTrackerForGuild,
 
   canOpenGatheringPlace(guildId) {
     const today = getToday();
 
-    resetDailyTrackerIfNeeded(guildId, today);
+    setDailyTrackerForGuild(guildId, today);//Ensure if a daily tracker exists first
 
     const guildData = rolledNumbers.get(guildId);
     return guildData.lastOpened !== today;
@@ -51,7 +52,7 @@ module.exports = {
   markGatheringPlaceOpened(guildId) {
     const today = getToday();
 
-    resetDailyTrackerIfNeeded(guildId, today);
+    setDailyTrackerForGuild(guildId, today);
 
     const guildData = rolledNumbers.get(guildId);
     guildData.lastOpened = today;
