@@ -25,9 +25,11 @@ module.exports = {
       // Update visitor memory based on the roll
       if (roll > visitor.memory) {
         visitor.memory += 1;
+        sceneManager.setCurrentTwistRoll(channelId, 1);
         outcome = getMemoryOutcome(interaction, 1);
       } else {
         visitor.memory -= 1;
+        sceneManager.setCurrentTwistRoll(channelId, -1);
         outcome = getMemoryOutcome(interaction, -1);
       }
 

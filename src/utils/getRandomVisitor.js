@@ -24,8 +24,9 @@ const getRandomVisitor = async (existingPlace) => {
     //console.debug('Random index selected:', randomIndex);
 
     const randomVisitor = matchingVisitors[randomIndex];
-   //console.debug('Random visitor selected:', randomVisitor);
-
+   console.debug('Random visitor selected:', randomVisitor);
+   
+    randomVisitor.memory = 1;
     return randomVisitor;
   } catch (error) {
     console.error('Error fetching random visitor:', error);

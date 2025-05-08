@@ -1,8 +1,30 @@
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const sceneManager = require("./sceneManager.js");
 
-function getMemoryOutcome(interaction, memoryChange) {
+function getMemoryOutcome(interaction) {
   const visitor = sceneManager.getCurrentVisitor(interaction.channel.id);
+  const prompt = sceneManager.getCurrentPrompt(interaction.channel.id);
+  let memoryChange = 0; 
+
+  if (!visitor) {
+    return {
+      resultMessage: "⚠️ Missing visitor data."
+    };
+  }
+
+  if (!prompt) {
+    const twistRoll = sceneManager.getCurrentTwistRoll(interaction.channel.id);
+    if(twistRoll>0){
+      memoryChange = twistRoll;
+    }else{
+    return {
+      resultMessage: "⚠️ Missing prompt data."
+    };
+  }
+  } else{
+    memoryChange = prompt.memoryChange;
+  }
+
   let resultMessage = '';
   if (memoryChange !== 0) {
     const changeType = memoryChange > 0 ? 'increased by' : 'decreased by';

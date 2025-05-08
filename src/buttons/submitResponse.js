@@ -53,7 +53,7 @@ module.exports = {
 
       // Update visitor memory and clear the last prompt
       visitor.memory += prompt.memoryChange;
-      sceneManager.setCurrentPrompt(channelId, null);
+      //sceneManager.setCurrentPrompt(channelId, null);
 
     //console.debug("Calling getMemoryOutcome...");
     const outcome = getMemoryOutcome(interaction, prompt.memoryChange);

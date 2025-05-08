@@ -1,3 +1,5 @@
+const { get, set } = require("mongoose");
+
 const activeScenes = new Map();
 
 module.exports = {
@@ -6,6 +8,7 @@ module.exports = {
       messages: [],
       currentVisitor: visitor,
       currentPrompt: null,
+      currentTwistRoll: 0,
     });
   },
 
@@ -39,6 +42,17 @@ module.exports = {
   },
 
   getCurrentPrompt(channelId) {
+    console.debug("Getting current prompt for channel:", channelId);
+    console.debug("Active scenes:", activeScenes);
     return activeScenes.get(channelId)?.currentPrompt || null;
   },
+
+  setCurrentTwistRoll(channelId, roll) {
+    if (!activeScenes.has(channelId)) return;
+    activeScenes.get(channelId).currentTwistRoll = roll;
+  },
+  
+  getCurrentTwistRoll(channelId) {
+    return activeScenes.get(channelId)?.currentTwistRoll || 0;
+  }
 };
