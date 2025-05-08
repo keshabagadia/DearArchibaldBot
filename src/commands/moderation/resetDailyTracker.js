@@ -7,7 +7,8 @@ module.exports = {
 
   callback: async (client, interaction) => {
     try {
-      await dailyTracker.resetDailyTracker();
+      // console.log(`Resetting daily tracker for guild: ${interaction.guild.id}`);
+      await dailyTracker.resetDailyTracker(interaction.guild.id);
       await interaction.reply({
         content: "✅ The daily tracker has been manually reset for today.",
         flags: MessageFlags.Ephemeral, // Only visible to the user who clicked the button

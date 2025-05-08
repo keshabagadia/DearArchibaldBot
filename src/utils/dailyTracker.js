@@ -14,6 +14,7 @@ async function getOrCreateDailyTracker(guildId) {
 }
 
 async function resetDailyTracker(guildId) {
+  // console.log(`Resetting daily tracker for guild: ${guildId}`);
   await DailyTrackRecord.findOneAndUpdate(
     {guildId},
     { rolled: [], lastOpened: null },
