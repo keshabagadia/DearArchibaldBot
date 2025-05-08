@@ -14,7 +14,7 @@ function getMemoryOutcome(interaction) {
 
   if (!prompt) {
     const twistRoll = sceneManager.getCurrentTwistRoll(interaction.channel.id);
-    if(twistRoll>0){
+    if(twistRoll!=0){
       memoryChange = twistRoll;
     }else{
     return {
