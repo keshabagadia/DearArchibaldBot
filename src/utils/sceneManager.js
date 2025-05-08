@@ -1,11 +1,11 @@
-const activeScenes = new Map(); // channelId -> { messages, currentVisitor, lastPrompt }
+const activeScenes = new Map();
 
 module.exports = {
   startScene(channelId, visitor) {
     activeScenes.set(channelId, {
       messages: [],
       currentVisitor: visitor,
-      lastPrompt: null,
+      currentPrompt: null,
     });
   },
 
@@ -33,16 +33,12 @@ module.exports = {
     return activeScenes.get(channelId)?.currentVisitor || null;
   },
 
-  setLastPrompt(channelId, prompt) {
+  setCurrentPrompt(channelId, prompt) {
     if (!activeScenes.has(channelId)) return;
-
-    activeScenes.get(channelId).lastPrompt = {
-      ...prompt,
-      receivedAt: Date.now(), // Used for response timing check
-    };
+    activeScenes.get(channelId).currentPrompt = prompt;
   },
 
-  getLastPrompt(channelId) {
-    return activeScenes.get(channelId)?.lastPrompt || null;
+  getCurrentPrompt(channelId) {
+    return activeScenes.get(channelId)?.currentPrompt || null;
   },
 };

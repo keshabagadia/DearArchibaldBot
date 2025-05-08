@@ -1,7 +1,8 @@
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
+const sceneManager = require("./sceneManager.js");
 
-function getMemoryOutcome(visitor, memoryChange) {
-  // Start with the base message
+function getMemoryOutcome(interaction, memoryChange) {
+  const visitor = sceneManager.getCurrentVisitor(interaction.channel.id);
   let resultMessage = '';
   if (memoryChange !== 0) {
     const changeType = memoryChange > 0 ? 'increased by' : 'decreased by';

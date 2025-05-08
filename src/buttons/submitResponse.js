@@ -34,7 +34,7 @@ module.exports = {
       }
 
       const visitor = sceneManager.getCurrentVisitor(channelId);
-      const prompt = sceneManager.getLastPrompt(channelId);
+      const prompt = sceneManager.getCurrentPrompt(channelId);
 
       if (!visitor || !prompt) {
         return interaction.reply({
@@ -53,11 +53,11 @@ module.exports = {
 
       // Update visitor memory and clear the last prompt
       visitor.memory += prompt.memoryChange;
-      sceneManager.setLastPrompt(channelId, null);
+      sceneManager.setCurrentPrompt(channelId, null);
 
-          console.debug("Calling getMemoryOutcome...");
-    const outcome = getMemoryOutcome(visitor, prompt.memoryChange);
-    console.debug("getMemoryOutcome result:", outcome);
+    //console.debug("Calling getMemoryOutcome...");
+    const outcome = getMemoryOutcome(interaction, prompt.memoryChange);
+    //console.debug("getMemoryOutcome result:", outcome);
 
     await interaction.reply({
       content: outcome.resultMessage,

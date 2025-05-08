@@ -9,9 +9,9 @@ module.exports = async (client, message) => {
 
     // Check if a scene is active and if there is an existing prompt
     if (sceneManager.isSceneActive(channelId)) {
-        const lastPrompt = sceneManager.getLastPrompt(channelId);
+        const currentPrompt = sceneManager.getCurrentPrompt(channelId);
 
-        if (!lastPrompt) {
+        if (!currentPrompt) {
             console.debug('No existing prompt found for this scene.');
             return;
         }

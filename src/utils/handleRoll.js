@@ -28,7 +28,7 @@ async function handleRoll(interaction, visitor, deductMemory = false) {
     });
   }
 
-  sceneManager.setLastPrompt(channelId, isNewPrompt ? prompt : null);
+  sceneManager.setCurrentPrompt(channelId, isNewPrompt ? prompt : null);
 
   const twistNote = isNewPrompt ? "" : "There has been a twist. ";
   const response = `🎲 You rolled a **${roll}**${isNewPrompt ? "" : " again"}.\n${twistNote}${prompt.prompt}\n> Visitor's Memory: ${visitor.memory}`;

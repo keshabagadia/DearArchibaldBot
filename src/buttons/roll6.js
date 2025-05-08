@@ -21,14 +21,14 @@ module.exports = {
 
       // Roll a d6
       const roll = Math.floor(Math.random() * 6) + 1;
-      let outcome = getMemoryOutcome(visitor, roll);
+      let outcome = getMemoryOutcome(interaction, roll);
       // Update visitor memory based on the roll
       if (roll > visitor.memory) {
         visitor.memory += 1;
-        outcome = getMemoryOutcome(visitor, 1);
+        outcome = getMemoryOutcome(interaction, 1);
       } else {
         visitor.memory -= 1;
-        outcome = getMemoryOutcome(visitor, -1);
+        outcome = getMemoryOutcome(interaction, -1);
       }
 
       // Use the outcome to reply to the interaction
