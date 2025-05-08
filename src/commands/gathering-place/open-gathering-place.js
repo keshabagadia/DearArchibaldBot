@@ -20,7 +20,7 @@ module.exports = {
       });
     }
 
-    if (!dailyTracker.canOpenGatheringPlace(guildId)) {
+    if (!await dailyTracker.canOpenGatheringPlace(guildId)) {
       return interaction.reply({
         content: "⚠️ The gathering place has already been opened today.",
         flags: MessageFlags.Ephemeral,
@@ -37,7 +37,7 @@ module.exports = {
       });
     }
 
-    dailyTracker.markGatheringPlaceOpened(guildId);
+    await dailyTracker.markGatheringPlaceOpened(guildId);
 
     if (sceneManager.isSceneActive(channelId)) {
       return interaction.reply({

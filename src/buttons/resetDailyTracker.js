@@ -6,7 +6,7 @@ module.exports = {
   execute: async (interaction) => {
     const guildId = interaction.guild.id;
 
-    dailyTracker.resetDailyTracker(guildId);
+    await dailyTracker.resetDailyTracker(guildId);
 
     await interaction.reply({
       content: "✅ The daily tracker has been manually reset for today.",

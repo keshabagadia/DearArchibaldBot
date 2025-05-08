@@ -17,7 +17,7 @@ async function handleRoll(interaction, visitor, deductMemory = false) {
   }
 
   const roll = Math.floor(Math.random() * 20) + 1;
-  const isNewPrompt = trackRoll(interaction.guild.id, roll);
+  const isNewPrompt = await trackRoll(interaction.guild.id, roll);
   const promptId = isNewPrompt ? roll : roll + 100;
   const prompt = prompts.find((p) => p.id === promptId);
 

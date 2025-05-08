@@ -1,60 +1,63 @@
 const DailyTrackRecord = require('../models/DailyTrackRecord.js');
-const rolledNumbers = new Map(); // guildId -> { rolled: Set<number>, lastOpened: Date }
 
 function getToday() {
   return new Date().toDateString();
 }
 
-function resetDailyTracker(guildId) {
-  rolledNumbers.set(guildId, { rolled: new Set(), lastOpened: null });
+async function getOrCreateDailyTracker(guildId) {
+  let tracker = await DailyTrackRecord.findOne({ guildId });
+  if (!tracker) {
+    tracker = new DailyTrackRecord({ guildId });
+    await tracker.save();
+  }
+  return tracker;
 }
 
-function setDailyTrackerForGuild(guildId, today) {
-  if (!rolledNumbers.has(guildId)) {
-    resetDailyTracker(guildId);
-  }
+async function resetDailyTracker(guildId) {
+  await DailyTrackRecord.findOneAndUpdate(
+    {guildId},
+    { rolled: [], lastOpened: null },
+    { upsert: true}
+  );
+}
 
-  const guildData = rolledNumbers.get(guildId);
-
-  if (guildData.lastOpened !== today) {
-    resetDailyTracker(guildId);
-    guildData.lastOpened = today;
-  }
+async function setDailyTrackerForGuild(guildId, today) {
+  const tracker = await getOrCreateDailyTracker(guildId);
+  if(tracker.lastOpened === today) return; // No need to update if already set  
+  await resetDailyTracker(guildId); // Reset the tracker if it's a new day
 }
 
 module.exports = {
-  trackRoll(guildId, roll) {
+  async trackRoll(guildId, roll) {
     const today = getToday();
 
-    setDailyTrackerForGuild(guildId, today);
+    await setDailyTrackerForGuild(guildId, today);
+    const tracker = await getOrCreateDailyTracker(guildId);
 
-    const guildData = rolledNumbers.get(guildId);
-
-    const isNewRoll = !guildData.rolled.has(roll);
-    if (isNewRoll) guildData.rolled.add(roll);
+    const isNewRoll = !tracker.rolled.includes(roll);
+    if (isNewRoll) {
+      tracker.rolled.push(roll);
+      await tracker.save();
+    }
 
     return isNewRoll; // Return whether the roll was new
   },
 
   resetDailyTracker,
+  setDailyTrackerForGuild,
 
-  resetDailyTrackerIfNeeded: setDailyTrackerForGuild,
-
-  canOpenGatheringPlace(guildId) {
+  async canOpenGatheringPlace(guildId) {
     const today = getToday();
-
-    setDailyTrackerForGuild(guildId, today);//Ensure if a daily tracker exists first
-
-    const guildData = rolledNumbers.get(guildId);
-    return guildData.lastOpened !== today;
+    const tracker = await getOrCreateDailyTracker(guildId);
+    // console.log(`Tracker for guild ${guildId}:`, tracker); // Debugging line
+    return tracker.lastOpened !== today;
   },
 
-  markGatheringPlaceOpened(guildId) {
+  async markGatheringPlaceOpened(guildId) {
     const today = getToday();
 
-    setDailyTrackerForGuild(guildId, today);
-
-    const guildData = rolledNumbers.get(guildId);
-    guildData.lastOpened = today;
+    const tracker = await getOrCreateDailyTracker(guildId);
+    tracker.lastOpened = today;
+    await tracker.save();
   },
 };
