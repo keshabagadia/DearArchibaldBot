@@ -10,7 +10,7 @@ const getRandomVisitor = async (existingPlace) => {
       return null;
     }
 
-    console.debug('Filtering visitors by level:', existingPlace.level);
+    // console.debug('Filtering visitors by level:', existingPlace.level);
     const matchingVisitors = visitors.filter(visitor => visitor.level === existingPlace.level || visitor.level === 1);
 
     //console.debug('Matching visitors:', matchingVisitors);

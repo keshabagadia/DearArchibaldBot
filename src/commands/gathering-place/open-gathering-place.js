@@ -20,6 +20,13 @@ module.exports = {
       });
     }
 
+    if (sceneManager.isSceneActive(channelId)) {
+      return interaction.reply({
+        content: "A scene is already active in this channel.",
+        flags: MessageFlags.Ephemeral,
+      });
+    }
+
     if (!await dailyTracker.canOpenGatheringPlace(guildId)) {
       return interaction.reply({
         content: "⚠️ The gathering place has already been opened today.",
@@ -28,7 +35,7 @@ module.exports = {
     }
 
     const visitor = await getRandomVisitor(existingPlace); // Pass existingPlace to getRandomVisitor
-    console.log(`Existing gathering place: ${existingPlace}`);
+    // console.log(`Existing gathering place: ${existingPlace}`);
 
     if (!visitor) {
       return interaction.reply({
@@ -38,13 +45,6 @@ module.exports = {
     }
 
     await dailyTracker.markGatheringPlaceOpened(guildId);
-
-    if (sceneManager.isSceneActive(channelId)) {
-      return interaction.reply({
-        content: "A scene is already active in this channel.",
-        flags: MessageFlags.Ephemeral,
-      });
-    }
 
     const randomScenario =
       visitor.optionalScenarios[
