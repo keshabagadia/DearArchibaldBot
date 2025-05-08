@@ -2,7 +2,12 @@ const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 
 function getMemoryOutcome(visitor, memoryChange) {
   // Start with the base message
-  let resultMessage = `\nThe visitor's memory has changed by ${memoryChange}.\n> Visitor's Memory: ${visitor.memory}`;
+  let resultMessage = '';
+  if (memoryChange !== 0) {
+    const changeType = memoryChange > 0 ? 'increased by' : 'decreased by';
+    resultMessage = `\nThe visitor's memory has ${changeType} ${Math.abs(memoryChange)}.`;
+  }
+  resultMessage += `\n> Visitor's Memory: ${visitor.memory}`;
   let components = [];
 
   // Append additional information based on memory conditions
