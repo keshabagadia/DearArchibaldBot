@@ -3,9 +3,9 @@ const sceneManager = require("../utils/sceneManager.js");
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageFlags } = require("discord.js");
 const { trackRoll } = require("./dailyTracker.js");
 
-async function handleRoll(interaction, visitor, deductMemory = false) {
+async function handleRoll(interaction, deductMemory = false) {
   const channelId = interaction.channel.id;
-
+  const visitor = sceneManager.getCurrentVisitor(channelId);
   if (deductMemory) {
     if (visitor.memory <= 0) {
       return interaction.reply({

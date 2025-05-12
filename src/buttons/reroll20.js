@@ -15,6 +15,6 @@ module.exports = {
       });
     }
     
-    await handleRoll(interaction, visitor, true);
+    await handleRoll(interaction, true);
   },
 };
