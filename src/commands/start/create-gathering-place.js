@@ -7,7 +7,6 @@ const {
 const GatheringPlace = require('../../models/GatheringPlace');
 const gatheringPlaceManager = require('../../utils/gatheringPlaceManager');
 const { buildGatheringPlaceModal } = require('../../modals/gatheringPlaceModal');
-const { debug } = require('openai/core.mjs');
 
 module.exports = {
   name: 'create-gathering-place',
